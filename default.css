@@ -1,0 +1,130 @@
+/*dateField styles*/
+/*default*/
+.dateField-container{
+	position:absolute;
+	width:210px;
+	border:1px solid rgb(229,229,229);
+	z-index:99999;
+	background:#fff;
+	font-size:13px;
+	margin-top:0px;
+	cursor: pointer;
+	display:none;
+}
+.dateField-header{
+	width:212px;
+	height:50px;
+	position:relative;
+	left:-1px;
+}
+.dateField-header-btns{
+	width:100%;
+	height:30px;
+	text-align:center;
+	background:rgb(243,95,143);
+}
+.btn{
+	user-select:none;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+}
+.dateField-header-btn-left{
+	float: left;
+	display:block;
+	width:30px;
+	height:30px;
+	color:#fff;
+	line-height:30px;
+}
+.dateField-header-btn-left:hover{
+	background:rgb(238,34,102);
+}
+.dateField-header-datePicker{
+	display:inline-block;
+	width:120px;
+	text-align:center;
+	color:#fff;
+	line-height:30px;
+}
+.dateField-header-datePicker:hover{
+	background:rgb(238,34,102);
+}
+.dateField-header-btn-right{
+	float: right;
+	width:30px;
+	height:30px;
+	display:block;
+	color:#fff;
+	line-height:30px;
+}
+.dateField-header-btn-right:hover{
+	background:rgb(238,34,102);
+}
+.dateField-header-week{
+	clear:both;
+	width:100%;
+	height:26px;
+}
+.dateField-header-week li{
+	float: left;
+	width:30px;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+}
+.dateField-body{
+	width:100%;
+}
+.dateField-body-days{
+	clear: both;
+}
+.dateField-body-days li{
+	float: left;
+	width:30px;
+	height:30px;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	-ms-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	border-top:1px solid rgb(229,229,229);
+	border-right:1px solid rgb(229,229,229);
+	line-height:30px;
+	text-align:center;
+}
+.dateField-body-days li:hover{
+	color:#fff;
+	background:rgb(243,95,143);
+}
+.dateField-body-days li.active{
+	color:#fff;
+	background:rgb(243,95,143);
+}
+.dateField-body-days li.last{
+	border-right:0;
+}
+.dateField-footer{
+	border-top:1px solid rgb(229,229,229);
+	clear:both;
+	width:100%;
+	height:26px;
+	font-size:12px;
+}
+.dateField-footer-close{
+	margin-top:2px;
+	display:inline-block;
+	width:100%;
+	height:22px;
+	background:rgb(245,245,245);
+	text-align: center;
+	line-height:22px;
+}
+.dateField-footer-close:hover{
+	background:rgb(238,238,238);
+}
+.dateField-day{
+	user-select:none;
+	-webkit-user-select:none;
+	-ms-user-select:none;
+	-moz-user-select:none;
+}
