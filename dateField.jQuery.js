@@ -13,9 +13,9 @@ jQuery.fn.extend({
 			_parent=$(this).parent(),
 			_nowDate={
 				year:new Date().getFullYear(),
-				month:new Date().getMonth()
+				month:new Date().getMonth()+1
 			};
-		var today=new Date();
+		var daysArray=[31,28,31,30,31,30,31,31,30,31,30,31];
 
 		/*init*/
 		_self.on(_eventType,function(){
@@ -32,7 +32,7 @@ jQuery.fn.extend({
 					+"</div>"
 					+"<ul class='dateField-header-week'><li>日</li><li>一</li><li>二</li><li>三</li><li>四</li><li>五</li><li>六</li></ul>"
 					+"</div>");
-			var _body=$("<div class='dateField-body'>"+self.getDay(today.getMonth())+"</div>");
+			var _body=$("<div class='dateField-body'>"+self.getDays(_nowDate.year,_nowDate.month)+"</div>");
 			var _footer=$("<div class='dateField-footer'><span class='btn dateField-footer-close'>关闭</span></div>");
 			_container.append(_header).append(_body).append(_footer);
 			_self.parent().append(_container);
@@ -43,24 +43,33 @@ jQuery.fn.extend({
 		});
 
 		/*some functions*/
-		self.getDay=function(month){
-			var _year=2015,
-				_month=8;
-			var firstDay=new Date('2014/12/01').getDay();
-			var dateObj={};
+		/*get any year and any month's days into a list*/
+		self.getDays=function(year,month){
+			var _monthDay=self.getMonthDays(year,month);
+			var _firstDay=new Date(year+'/'+month+'/'+'01').getDay();  //get this month's first day's weekday
 			var returnStr='';
 			returnStr+="<ul class='dateField-body-days'>";
-
 			for(var i=1;i<=42;i++){
-				if(i%7===0){
-					returnStr+="<li class='dateField-day last'>"+self.filterDay(i-6)+"</li>";
+				if(i<=_monthDay+_firstDay){
+					if(i%7===0){
+						returnStr+="<li class='dateField-day last'>"+self.filterDay(i-_firstDay)+"</li>";
+					}else{
+						returnStr+="<li class='dateField-day'>"+self.filterDay(i-_firstDay)+"</li>";
+					}
+					
 				}else{
-					returnStr+="<li class='dateField-day'>"+self.filterDay(i-6)+"</li>";
+					if(i%7===0){
+						returnStr+="<li class='dateField-day last'></li>";
+					}else{
+						returnStr+="<li class='dateField-day'></li>";
+					}
+
 				}
 			}
 			returnStr+="</ul>";
 			return returnStr;
 		}
+		/*filter days*/
 		self.filterDay=function(day){
 			if(day<=0 || day>31) {
 				return '';
@@ -68,16 +77,18 @@ jQuery.fn.extend({
 				return day;
 			}
 		}
-		self.isPinYear=function(year){
+		/*judge any year is LeapYear*/
+		self.isLeapYear=function(year){
 			var bolRet = false;
-			if (0==year%4&&((year%100!=0)||(year%400==0))) {
+			if (0===year%4&&((year%100!==0)||(year%400===0))) {
 			bolRet = true;
 			}
 			return bolRet;
 		}
+		/*get any year and any month's full days*/
 		self.getMonthDays=function(year,month){
-			var c=m_aMonHead[month-1];
-			if((month==2)&&isPinYear(year)) c++;
+			var c=daysArray[month-1];
+			if((month===2) && self.isLeapYear(year)) c++;
 			return c;
 		}
 
@@ -102,6 +113,7 @@ jQuery.fn.extend({
 				_nowDate.month=12;
 			}
 			$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+			$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
 		});
 
 		/*go to next month*/
@@ -112,6 +124,7 @@ jQuery.fn.extend({
 				_nowDate.month=1;
 			}
 			$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+			$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
 		});
 
 		/*select month*/

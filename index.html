@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8" />
     <title>tabs demo</title>
+    <link rel="stylesheet" href="default.css" />
 </head>
 <body>
-
-    <div>
-        
+    <div class="input-group">
+        <input type="text" id="input-date" class="input-text">
     </div>
-
-
     <script type="text/javascript" src="jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="tabs.jQuery.js"></script>
+    <script type="text/javascript" src="dateField.jQuery.js"></script>
     <script type="text/javascript">
         ;$(function(){
-        	
+        	$('#input-date').dateField({
+                eventType:'click',
+                style:'default'
+            })
         });
     </script>
 </body>

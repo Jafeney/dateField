@@ -1,4 +1,10 @@
 /*dateField styles*/
+/*reset*/
+ul,li{
+	padding:0;
+	margin:0;
+	list-style: none;
+}
 /*default*/
 .dateField-container{
 	position:absolute;
