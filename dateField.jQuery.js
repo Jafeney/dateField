@@ -52,18 +52,16 @@ jQuery.fn.extend({
 			for(var i=1;i<=42;i++){
 				if(i<=_monthDay+_firstDay){
 					if(i%7===0){
-						returnStr+="<li class='dateField-day last'>"+self.filterDay(i-_firstDay)+"</li>";
+						returnStr+="<li class='dateField-select select-day last'>"+self.filterDay(i-_firstDay)+"</li>";
 					}else{
-						returnStr+="<li class='dateField-day'>"+self.filterDay(i-_firstDay)+"</li>";
+						returnStr+="<li class='dateField-select select-day'>"+self.filterDay(i-_firstDay)+"</li>";
 					}
-					
 				}else{
 					if(i%7===0){
-						returnStr+="<li class='dateField-day last'></li>";
+						returnStr+="<li class='dateField-select select-day last'></li>";
 					}else{
-						returnStr+="<li class='dateField-day'></li>";
+						returnStr+="<li class='dateField-select select-day'></li>";
 					}
-
 				}
 			}
 			returnStr+="</ul>";
@@ -81,7 +79,7 @@ jQuery.fn.extend({
 		self.isLeapYear=function(year){
 			var bolRet = false;
 			if (0===year%4&&((year%100!==0)||(year%400===0))) {
-			bolRet = true;
+				bolRet = true;
 			}
 			return bolRet;
 		}
@@ -91,11 +89,30 @@ jQuery.fn.extend({
 			if((month===2) && self.isLeapYear(year)) c++;
 			return c;
 		}
+		/*get this year's months*/
+		self.getMonths=function(){
+			var returnStr="";
+			returnStr="<ul class='dateField-body-days dateField-body-months'>";
+			for(var i=0;i<12;i++){
+				if((i+1)%3===0){
+					returnStr+="<li class='dateField-select select-month last' data-month='"+(i+1)+"'>"+self.switchMonth(i)+"</li>";
+				}else{
+					returnStr+="<li class='dateField-select select-month' data-month='"+(i+1)+"'>"+self.switchMonth(i)+"</li>";
+				}
+			}
+			returnStr+='</ul>';
+			return returnStr;
+		}
+		/*switch month number to chinese*/
+		self.switchMonth=function(number){
+			var monthArray=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+			return monthArray[number];
+		}
 
-		/*select day*/
-		_parent.on('click','.dateField-day',function(){
+		/*select a day*/
+		_parent.on('click','.dateField-select.select-day',function(){
 			if($(this).text()!==''){
-				$('.dateField-day').removeClass('active');
+				$('.dateField-select.select-day').removeClass('active');
 				$(this).addClass('active');
 				_self.val($(this).parent().parent().siblings().find('.dateField-header-datePicker').text().replace(/[\u4e00-\u9fa5]/g,'-')+$(this).text());
 				_self.parent().find('.dateField-container').remove();
@@ -113,6 +130,7 @@ jQuery.fn.extend({
 				_nowDate.month=12;
 			}
 			$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+			$('.dateField-header-week').show();
 			$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
 		});
 
@@ -124,10 +142,27 @@ jQuery.fn.extend({
 				_nowDate.month=1;
 			}
 			$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+			$('.dateField-header-week').show();
 			$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
 		});
 
-		/*select month*/
+		/*switch month select*/
+		_parent.on('click','.dateField-header-datePicker',function(){
+			$('.dateField-header-week').hide();
+			$('.dateField-body').html(self.getMonths());
+		});
+
+		/*select a month*/
+		_parent.on('click','.dateField-select.select-month',function(){
+			if($(this).text()!==''){
+				$('.dateField-select.select-month').removeClass('active');
+				$(this).addClass('active');
+				_nowDate.month=$(this).attr('data-month');
+				$(this).parent().parent().siblings().find('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+				$('.dateField-header-week').show();
+				$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
+			}
+		});
 
 		/*close the dateFiled*/
 		_parent.on('click','.dateField-footer-close',function(){

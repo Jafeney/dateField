@@ -1,10 +1,4 @@
 /*dateField styles*/
-/*reset*/
-ul,li{
-	padding:0;
-	margin:0;
-	list-style: none;
-}
 /*default*/
 .dateField-container{
 	position:absolute;
@@ -19,7 +13,6 @@ ul,li{
 }
 .dateField-header{
 	width:212px;
-	height:50px;
 	position:relative;
 	left:-1px;
 }
@@ -128,9 +121,16 @@ ul,li{
 .dateField-footer-close:hover{
 	background:rgb(238,238,238);
 }
-.dateField-day{
+.dateField-select{
 	user-select:none;
 	-webkit-user-select:none;
 	-ms-user-select:none;
 	-moz-user-select:none;
+}
+.dateField-body-months{
+}
+.dateField-body-months li{
+	width:70px;
+	height:35px;
+	line-height:35px;
 }
