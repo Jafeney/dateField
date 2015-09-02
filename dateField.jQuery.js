@@ -209,7 +209,7 @@ jQuery.fn.extend({
 			if($(this).text()!==''){
 				$('.dateField-select.select-month').removeClass('active');
 				$(this).addClass('active');
-				_nowDate.month=$(this).attr('data-month');
+				_nowDate.month=$(this).data('month');
 				$(this).parent().parent().siblings().find('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
 				$('.dateField-header-week').show();
 				$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
