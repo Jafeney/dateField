@@ -104,11 +104,118 @@ jQuery.fn.extend({
 			returnStr+='</ul>';
 			return returnStr;
 		}
+		/*get siblings 12 years*/
+		self.getYears=function(year){
+			var returnStr="";
+			returnStr="<ul class='dateField-body-days dateField-body-years'>";
+			for(var i=0;i<12;i++){
+				if((i+1)%3===0){
+					returnStr+="<li class='dateField-select select-year last' data-year='"+(year+i)+"'>"+(year+i)+"</li>";
+				}else{
+					returnStr+="<li class='dateField-select select-year' data-year='"+(year+i)+"'>"+(year+i)+"</li>";
+				}
+			}
+			returnStr+='</ul>';
+			return returnStr;	
+		}
 		/*switch month number to chinese*/
 		self.switchMonth=function(number){
 			var monthArray=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
 			return monthArray[number];
 		}
+
+		/*go to prev month*/
+		_parent.on('click','.dateField-header-btn-left',function(){
+			switch(_switchState){
+				/*prev month*/
+				case 0:
+					_nowDate.month--;
+					if(_nowDate.month===0){
+						_nowDate.year--;
+						_nowDate.month=12;
+					}
+					$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+					$('.dateField-header-week').show();
+					$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
+					break;
+				/*next 12 years*/
+				case 2:
+					_nowDate.year-=12;
+					$('.dateField-body').html(self.getYears(_nowDate.year));
+					break;
+				default:
+					break;
+			}
+		});
+
+		/*go to next month*/
+		_parent.on('click','.dateField-header-btn-right',function(){
+			switch(_switchState){
+				/*next month*/
+				case 0:
+					_nowDate.month++;
+					if(_nowDate.month===13){
+						_nowDate.year++;
+						_nowDate.month=1;
+					}
+					$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+					$('.dateField-header-week').show();
+					$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
+					break;
+				/*next 12 years*/
+				case 2:
+					_nowDate.year+=12;
+					$('.dateField-body').html(self.getYears(_nowDate.year));
+					break;
+				default:
+					break;
+			}
+		});
+
+		/*switch choose year or month*/
+		_parent.on('click','.dateField-header-datePicker',function(){
+			switch(_switchState){
+				case 0:
+					/*switch month select*/
+					$('.dateField-header-week').hide();
+					$('.dateField-body').html(self.getMonths());
+					_switchState=1;
+					break;
+				case 1:
+					/*switch year select*/
+					$('.dateField-body').html(self.getYears(_nowDate.year));
+					_switchState=2;
+					break;
+				default:
+					break;
+			}
+		});
+		
+		/*select a year*/
+		_parent.on('click','.dateField-select.select-year',function(){
+			if($(this).text()!==''){
+				$('.dateField-select.select-month').removeClass('active');
+				$(this).addClass('active');
+				_nowDate.year=$(this).data('year');
+				$(this).parent().parent().siblings().find('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+				$('.dateField-header-week').hide();
+				$('.dateField-body').html(self.getMonths());
+				_switchState=1;
+			}
+		});
+
+		/*select a month*/
+		_parent.on('click','.dateField-select.select-month',function(){
+			if($(this).text()!==''){
+				$('.dateField-select.select-month').removeClass('active');
+				$(this).addClass('active');
+				_nowDate.month=$(this).attr('data-month');
+				$(this).parent().parent().siblings().find('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+				$('.dateField-header-week').show();
+				$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
+				_switchState=0;
+			}
+		});
 
 		/*select a day*/
 		_parent.on('click','.dateField-select.select-day',function(){
@@ -123,62 +230,6 @@ jQuery.fn.extend({
 			}
 		});
 
-		/*go to prev month*/
-		_parent.on('click','.dateField-header-btn-left',function(){
-			_nowDate.month--;
-			if(_nowDate.month===0){
-				_nowDate.year--;
-				_nowDate.month=12;
-			}
-			$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
-			$('.dateField-header-week').show();
-			$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
-		});
-
-		/*go to next month*/
-		_parent.on('click','.dateField-header-btn-right',function(){
-			_nowDate.month++;
-			if(_nowDate.month===13){
-				_nowDate.year++;
-				_nowDate.month=1;
-			}
-			$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
-			$('.dateField-header-week').show();
-			$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
-		});
-
-		/*switch */
-		_parent.on('click','.dateField-header-datePicker',function(){
-			/*switch month select*/
-			$('.dateField-header-week').hide();
-			$('.dateField-body').html(self.getMonths());
-			/*switch year select*/
-		});
-		
-		/*select a year*/
-		_parent.on('click','.dateField-select.select-year',function(){
-			if($(this).text()!==''){
-				$('.dateField-select.select-month').removeClass('active');
-				$(this).addClass('active');
-				_nowDate.month=$(this).attr('data-month');
-				$(this).parent().parent().siblings().find('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
-				$('.dateField-header-week').show();
-				$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
-			}
-		});
-
-		/*select a month*/
-		_parent.on('click','.dateField-select.select-month',function(){
-			if($(this).text()!==''){
-				$('.dateField-select.select-month').removeClass('active');
-				$(this).addClass('active');
-				_nowDate.month=$(this).attr('data-month');
-				$(this).parent().parent().siblings().find('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
-				$('.dateField-header-week').show();
-				$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
-			}
-		});
-
 		/*close the dateFiled*/
 		/*click other field to close the dateField (outclick event)*/
 		$(document).on('click',function(e){
@@ -186,9 +237,10 @@ jQuery.fn.extend({
 				;
 			}else{
 				$('.dateField-container').hide();
+				_switchState=0;
 			}
 		});
 
-		return _self;
+		return self;
 	}
 });
