@@ -14,7 +14,8 @@ jQuery.fn.extend({
 			_nowDate={
 				year:new Date().getFullYear(),
 				month:new Date().getMonth()+1
-			};
+			},
+			_switchState=0; 
 		var daysArray=[31,28,31,30,31,30,31,31,30,31,30,31];
 
 		/*init*/
@@ -146,10 +147,24 @@ jQuery.fn.extend({
 			$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
 		});
 
-		/*switch month select*/
+		/*switch */
 		_parent.on('click','.dateField-header-datePicker',function(){
+			/*switch month select*/
 			$('.dateField-header-week').hide();
 			$('.dateField-body').html(self.getMonths());
+			/*switch year select*/
+		});
+		
+		/*select a year*/
+		_parent.on('click','.dateField-select.select-year',function(){
+			if($(this).text()!==''){
+				$('.dateField-select.select-month').removeClass('active');
+				$(this).addClass('active');
+				_nowDate.month=$(this).attr('data-month');
+				$(this).parent().parent().siblings().find('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
+				$('.dateField-header-week').show();
+				$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
+			}
 		});
 
 		/*select a month*/
@@ -165,11 +180,14 @@ jQuery.fn.extend({
 		});
 
 		/*close the dateFiled*/
-		_parent.on('click','.dateField-footer-close',function(){
-			$(this).parent().parent().remove();
+		/*click other field to close the dateField (outclick event)*/
+		$(document).on('click',function(e){
+			if($(e.target).hasClass('dateField-container') || $(e.target).hasClass('dateField-header-btn-left') || $(e.target).hasClass('dateField-header-datePicker') || $(e.target).hasClass('dateField-header-btn-right') || $(e.target).hasClass('dateField-select') || $(e.target)[0].id=='input-date'){
+				;
+			}else{
+				$('.dateField-container').hide();
+			}
 		});
-		/*click other filed to close the dateField*/
-		//I don't know
 
 		return _self;
 	}
