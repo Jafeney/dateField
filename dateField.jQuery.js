@@ -16,7 +16,8 @@ jQuery.fn.extend({
 				month:new Date().getMonth()+1
 			},
 			_switchState=0,
-		    daysArray=[31,28,31,30,31,30,31,31,30,31,30,31];
+			_monthArray=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+		    _daysArray=[31,28,31,30,31,30,31,31,30,31,30,31];
 
 		/*init*/
 		_self.on(_eventType,function(){
@@ -86,7 +87,7 @@ jQuery.fn.extend({
 		}
 		/*get any year and any month's full days*/
 		self.getMonthDays=function(year,month){
-			var c=daysArray[month-1];
+			var c=_daysArray[month-1];
 			if((month===2) && self.isLeapYear(year)) c++;
 			return c;
 		}
@@ -120,8 +121,7 @@ jQuery.fn.extend({
 		}
 		/*switch month number to chinese*/
 		self.switchMonth=function(number){
-			var monthArray=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
-			return monthArray[number];
+			return _monthArray[number];
 		}
 
 		/*go to prev month*/
@@ -135,13 +135,13 @@ jQuery.fn.extend({
 						_nowDate.month=12;
 					}
 					$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
-					$('.dateField-header-week').show();
-					$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
+					$(this).parent().siblings('ul').show();
+					$(this).parent().parent().siblings('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
 					break;
 				/*next 12 years*/
 				case 2:
 					_nowDate.year-=12;
-					$('.dateField-body').html(self.getYears(_nowDate.year));
+					$(this).parent().parent().siblings('.dateField-body').html(self.getYears(_nowDate.year));
 					break;
 				default:
 					break;
@@ -159,13 +159,13 @@ jQuery.fn.extend({
 						_nowDate.month=1;
 					}
 					$(this).siblings('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
-					$('.dateField-header-week').show();
-					$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
+					$(this).parent().siblings('ul').show();
+					$(this).parent().parent().siblings('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
 					break;
 				/*next 12 years*/
 				case 2:
 					_nowDate.year+=12;
-					$('.dateField-body').html(self.getYears(_nowDate.year));
+					$(this).parent().parent().siblings('.dateField-body').html(self.getYears(_nowDate.year));
 					break;
 				default:
 					break;
@@ -177,13 +177,13 @@ jQuery.fn.extend({
 			switch(_switchState){
 				case 0:
 					/*switch month select*/
-					$('.dateField-header-week').hide();
-					$('.dateField-body').html(self.getMonths());
+					$(this).parent().siblings('ul').hide();
+					$(this).parent().parent().siblings('.dateField-body').html(self.getMonths());
 					_switchState=1;
 					break;
 				case 1:
 					/*switch year select*/
-					$('.dateField-body').html(self.getYears(_nowDate.year));
+					$(this).parent().parent().siblings('.dateField-body').html(self.getYears(_nowDate.year));
 					_switchState=2;
 					break;
 				default:
@@ -194,12 +194,12 @@ jQuery.fn.extend({
 		/*select a year*/
 		_parent.on('click','.dateField-select.select-year',function(){
 			if($(this).text()!==''){
-				$('.dateField-select.select-month').removeClass('active');
+				$(this).parent().children('.dateField-select.select-year').removeClass('active');
 				$(this).addClass('active');
 				_nowDate.year=$(this).data('year');
 				$(this).parent().parent().siblings().find('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
-				$('.dateField-header-week').hide();
-				$('.dateField-body').html(self.getMonths());
+				$(this).parent().parent().parent().find('.dateField-header-week').hide();
+				$(this).parent().parent().html(self.getMonths());
 				_switchState=1;
 			}
 		});
@@ -207,12 +207,12 @@ jQuery.fn.extend({
 		/*select a month*/
 		_parent.on('click','.dateField-select.select-month',function(){
 			if($(this).text()!==''){
-				$('.dateField-select.select-month').removeClass('active');
+				$(this).parent().children('.dateField-select.select-month').removeClass('active');
 				$(this).addClass('active');
 				_nowDate.month=$(this).data('month');
 				$(this).parent().parent().siblings().find('.dateField-header-datePicker').text(_nowDate.year+'年'+_nowDate.month+'月');
-				$('.dateField-header-week').show();
-				$('.dateField-body').html(self.getDays(_nowDate.year,_nowDate.month));
+				$(this).parent().parent().parent().find('.dateField-header-week').show();
+				$(this).parent().parent().html(self.getDays(_nowDate.year,_nowDate.month));
 				_switchState=0;
 			}
 		});
@@ -220,7 +220,7 @@ jQuery.fn.extend({
 		/*select a day*/
 		_parent.on('click','.dateField-select.select-day',function(){
 			if($(this).text()!==''){
-				$('.dateField-select.select-day').removeClass('active');
+				$(this).parent().children('.dateField-select.select-day').removeClass('active');
 				$(this).addClass('active');
 				_self.val($(this).parent().parent().siblings().find('.dateField-header-datePicker').text().replace(/[\u4e00-\u9fa5]/g,'-')+$(this).text());
 				_self.parent().find('.dateField-container').remove();
@@ -233,10 +233,11 @@ jQuery.fn.extend({
 		/*close the dateFiled*/
 		/*click other field to close the dateField (outclick event)*/
 		$(document).on('click',function(e){
-			if($(e.target).hasClass('dateField-container') || $(e.target).hasClass('dateField-header-btn-left') || $(e.target).hasClass('dateField-header-datePicker') || $(e.target).hasClass('dateField-header-btn-right') || $(e.target).hasClass('dateField-select') || $(e.target)[0].id=='input-date'){
+			var temp=$(e.target);
+			if(temp.hasClass('dateField-container') || temp.hasClass('dateField-header-btn-left') || temp.hasClass('dateField-header-datePicker') || $(e.target).hasClass('dateField-header-btn-right') || $(e.target).hasClass('dateField-select') || $(e.target)[0].id=='input-date'){
 				;
 			}else{
-				$('.dateField-container').hide();
+				$('.dateField-container').remove();
 				_switchState=0;
 			}
 		});
