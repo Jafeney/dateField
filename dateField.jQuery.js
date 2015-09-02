@@ -15,8 +15,8 @@ jQuery.fn.extend({
 				year:new Date().getFullYear(),
 				month:new Date().getMonth()+1
 			},
-			_switchState=0; 
-		var daysArray=[31,28,31,30,31,30,31,31,30,31,30,31];
+			_switchState=0,
+		    daysArray=[31,28,31,30,31,30,31,31,30,31,30,31];
 
 		/*init*/
 		_self.on(_eventType,function(){
