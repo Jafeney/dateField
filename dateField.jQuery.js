@@ -119,6 +119,14 @@ jQuery.fn.extend({
 			returnStr+='</ul>';
 			return returnStr;
 		}
+		/*formatDate*/
+		self.formatDate=function(date){
+			if(date.length===1 || date<10){
+				return '0'+date;
+			}else{
+				return date;
+			}
+		}
 		/*switch month number to chinese*/
 		self.switchMonth=function(number){
 			return _monthArray[number];
@@ -220,9 +228,11 @@ jQuery.fn.extend({
 		/*select a day*/
 		_parent.on('click','.dateField-select.select-day',function(){
 			if($(this).text()!==''){
+				var _day=$(this).text();
 				$(this).parent().children('.dateField-select.select-day').removeClass('active');
 				$(this).addClass('active');
-				_self.val($(this).parent().parent().siblings().find('.dateField-header-datePicker').text().replace(/[\u4e00-\u9fa5]/g,'-')+$(this).text());
+				var _selectedDate=_nowDate.year+'-'+self.formatDate(_nowDate.month)+'-'+self.formatDate(_day);
+				_self.val(_selectedDate).attr('data-Date',_selectedDate);
 				_self.parent().find('.dateField-container').remove();
 
 				/*template code： just for this page*/
