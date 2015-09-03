@@ -117,14 +117,14 @@ jQuery.fn.extend({
 				}
 			}
 			returnStr+='</ul>';
-			return returnStr;	
+			return returnStr;
 		}
 		/*switch month number to chinese*/
 		self.switchMonth=function(number){
 			return _monthArray[number];
 		}
 
-		/*go to prev month*/
+		/*go to prev*/
 		_parent.on('click','.dateField-header-btn-left',function(){
 			switch(_switchState){
 				/*prev month*/
@@ -148,7 +148,7 @@ jQuery.fn.extend({
 			}
 		});
 
-		/*go to next month*/
+		/*go to next*/
 		_parent.on('click','.dateField-header-btn-right',function(){
 			switch(_switchState){
 				/*next month*/
@@ -190,7 +190,7 @@ jQuery.fn.extend({
 					break;
 			}
 		});
-		
+
 		/*select a year*/
 		_parent.on('click','.dateField-select.select-year',function(){
 			if($(this).text()!==''){
@@ -234,7 +234,7 @@ jQuery.fn.extend({
 		/*click other field to close the dateField (outclick event)*/
 		$(document).on('click',function(e){
 			var temp=$(e.target);
-			if(temp.hasClass('dateField-container') || temp.hasClass('dateField-header-btn-left') || temp.hasClass('dateField-header-datePicker') || $(e.target).hasClass('dateField-header-btn-right') || $(e.target).hasClass('dateField-select') || $(e.target)[0].id=='input-date'){
+			if(temp.hasClass('dateField-container') || temp.hasClass('dateField-header-btn-left') || temp.hasClass('dateField-header-datePicker') || $(e.target).hasClass('dateField-header-btn-right') || $(e.target).hasClass('dateField-select') || $(e.target)[0].id===_self.attr('id')){
 				;
 			}else{
 				$('.dateField-container').remove();
